@@ -77,6 +77,10 @@ void append(LinkedList* ll, const char* value, bool isFile){
 }
 
 void destroyList(LinkedList* ll){
+    if(ll == NULL){
+        free(ll);
+        return;
+    }
     LinkedList* list = ll;
     Node* iter = ll->head;
     while(iter){
@@ -85,6 +89,7 @@ void destroyList(LinkedList* ll){
         free(temp);
     }
     free(list);
+    return;
 }
 
 #endif

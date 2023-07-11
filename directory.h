@@ -76,10 +76,10 @@ int renameFile(char* pathInput, char* oldName, char* newName){
     strcat(original, old);
     strcat(changed, new);
     //proceed to rename.
-    if(MoveFile(original, changed) != 0){
+    if(rename(original, changed) == 0){
         printf("Successfully renamed from %s to %s.\n", old, new);
     }else{
-        printf("Error renaming %s.\n");
+        printf("Error renaming %s to %s.\n", old, new);
     }
     return 0;
 }
