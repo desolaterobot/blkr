@@ -8,8 +8,6 @@
 #include <limits.h>
 #include <windows.h>
 
-#define PATH_MAX 200
-
 // header file for directory and file related functions.
 
 // converts a directory into a linked list.
