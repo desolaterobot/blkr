@@ -1,0 +1,1 @@
+gcc -o blkr lib/blkr.c

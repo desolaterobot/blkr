@@ -8,6 +8,11 @@
 #include <limits.h>
 #include <windows.h>
 
+#define PATH_MAX 200
+
+// header file for directory and file related functions.
+
+// converts a directory into a linked list.
 LinkedList* listdir(char* dirAddress) {
     LinkedList* linkl = createList();
     DIR *directory;
@@ -33,6 +38,27 @@ LinkedList* listdir(char* dirAddress) {
     return linkl;
 }
 
+// opens the file or directory in a window
+void openDirectory(char* parentPathInput, char* fileName){
+    char parentPath[PATH_MAX];
+    strcpy(parentPath, parentPathInput);
+    strcat(parentPath, "/");
+    strcat(parentPath, fileName);
+    char command[PATH_MAX];
+    sprintf(command, "start \"\" \"%s\"", parentPath);
+    system(command);
+}
+
+//deletes a file or directory
+void deleteDirectory(char* parentPathInput, char* fileName){
+    char parentPath[PATH_MAX];
+    strcpy(parentPath, parentPathInput);
+    strcat(parentPath, "/");
+    strcat(parentPath, fileName);
+    remove(parentPath);
+}
+
+//get current directory as a string
 char* getThisDirectory(){
     char dir[PATH_MAX]; 
     getcwd(dir, sizeof(dir));
@@ -41,6 +67,7 @@ char* getThisDirectory(){
     return dir2;
 }
 
+//gets only the file extension from a filename.
 char* fileExtension(char* fileName){
     char* name[PATH_MAX];
     strcpy(name, fileName);
@@ -53,22 +80,22 @@ char* fileExtension(char* fileName){
     }
 }
 
-//newName need not have the file extension, we will automatically add it.
+//renames a file, given the parent path, old name and new name. new name does not need the file extension.
 int renameFile(char* pathInput, char* oldName, char* newName){
     //concatenate the pesky backslash
     char path[PATH_MAX];
     strcpy(path, pathInput);
     strcat(path, "\\");
-    //get the old and new name strings.
+    //copy the old and new name strings.
     char old[PATH_MAX];
     char new[PATH_MAX];
     strcpy(old, oldName);
     strcpy(new, newName);
-    //add the file extension to newName, get file extension from oldName.
+    //get file extension from oldName, add the file extension to newName
     char extension[PATH_MAX];
     strcpy(extension, fileExtension(old));
     strcat(new, extension);
-    //concatenate the old and new names onto the path string, store then in 'original' and 'changed'.
+    //concatenate the old and new names onto the path string, store them in 'original' and 'changed'.
     char original[PATH_MAX];
     char changed[PATH_MAX];
     strcpy(original, path);
@@ -80,6 +107,8 @@ int renameFile(char* pathInput, char* oldName, char* newName){
         printf("Successfully renamed from %s to %s.\n", old, new);
     }else{
         printf("Error renaming %s to %s.\n", old, new);
+        printf("%s may be an invalid filename or is already taken in the file.\n", new);
+        return -1;
     }
     return 0;
 }

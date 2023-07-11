@@ -6,11 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-int a = 0;
-void test(){
-    a++;
-    printf("test - %d\n", a);
-}
+// header file for string linked lists
 
 typedef struct n{
     char* value;
@@ -20,16 +16,20 @@ typedef struct n{
 
 typedef struct ll{
     Node* head;
+    Node* tail;
     int size;
 }LinkedList;
 
+//initializes an empty linked list
 LinkedList* createList(){
     LinkedList* ll = (LinkedList*)malloc(sizeof(LinkedList));
     ll->head = NULL;
     ll->size = 0;
+    ll->tail = NULL;
     return ll;
 }
 
+//prints a linked list of files
 void printList(LinkedList* ll){
     if(ll == NULL){
         printf("Unable to open directory. Did you enter it correctly?\n");
@@ -55,6 +55,7 @@ void printList(LinkedList* ll){
     printf("Total %d files and %d subdirectories in this target directory.\n", fileCount, dirCount);
 }
 
+//appends a node at the end of a linked list
 void append(LinkedList* ll, const char* value, bool isFile){
     //create the node.
     Node* newNode = (Node*)malloc(sizeof(Node));
@@ -62,20 +63,25 @@ void append(LinkedList* ll, const char* value, bool isFile){
     newNode->value = strdup(value);
     newNode->isFile = isFile;
     ll->size++;
-    //if linkedlist is empty, head will be the new node
+    //if linkedlist is empty, head and tail will be the new node
     if(ll->head == NULL){
         ll->head = newNode;
+        ll->tail = newNode;
         return;
     }
-    //navigate to the final node
+    ll->tail->next = newNode;
+    ll->tail = newNode;
+    return;
+
+    /* //linear search for appending is redundant if tail pointer is used.
     Node* iter = ll->head;
     while(iter->next){
         iter = iter->next;
     }
-    //then add the newnode.
-    iter->next = newNode;
+    iter->next = newNode; */
 }
 
+//frees the linked list.
 void destroyList(LinkedList* ll){
     if(ll == NULL){
         free(ll);
